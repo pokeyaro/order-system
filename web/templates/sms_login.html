@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>短信登录</h1>
+<form method="post" action="/sms/login/">
+    {% csrf_token %}
+    <input type="text" name="mobile" placeholder="手机号"/>
+    <input type="text" name="code" placeholder="短信验证码"/>
+    <input type="button" value="发送短信"/>
+
+    <input type="submit" value="登录"/>
+    <a href="{% url 'login' %}">用户名登录</a>
+</form>
+</body>
+</html>
