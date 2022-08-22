@@ -29,23 +29,20 @@
 <body>
 <div class="box">
     <h1>用户登录</h1>
-    <form method="post" action="/login/">
+    <form method="post" action="/login/" novalidate>
         {% csrf_token %}
         <div class="mb-4">
             <label for="role" class="form-label">角色</label>
-            <select class="form-select" name="role">
-                <option value="2">客户</option>
-                <option value="1">管理员</option>
-            </select>
+            {{ form.role }}
         </div>
 
         <div class="mb-4">
             <label for="username" class="form-label">用户名</label>
-            <input type="text" class="form-control" id="username" placeholder="username" name="username">
+            {{ form.username }}
         </div>
         <div class="mb-4">
             <label for="password" class="form-label">密码</label>
-            <input type="password" class="form-control" id="password" placeholder="password" name="password">
+            {{ form.password }}
         </div>
         <div style="margin-top: 30px;">
             <button type="submit" class="btn btn-primary">登录</button>
