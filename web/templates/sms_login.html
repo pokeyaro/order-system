@@ -36,7 +36,7 @@
         {% csrf_token %}
         <div class="mb-4">
             <label for="mobile" class="form-label">手机号</label>
-            <input type="text" class="form-control" id="mobile" placeholder="mobile">
+            <input type="text" class="form-control" id="mobile" placeholder="mobile" name="mobile">
         </div>
         {# 使用格栅系统，每行共12份，需要将多个标签包裹在一个div class='row'中 #}
         <div class="row">
@@ -44,7 +44,7 @@
             {# mb-x 指标签间上下边距 #}
             {# col-md-x 指标签占格栅x份; offset-md-x 指标签偏移x份 #}
             <div class="mb-4 col-md-8">
-                <input type="text" class="form-control" id="code" placeholder="code">
+                <input type="text" class="form-control" id="code" placeholder="code" name="code">
             </div>
             {# position: 外层相对浮动，内层相对固定 #}
             <div class="col-md-4" style="position: relative;">

@@ -13,7 +13,7 @@
 
         .box {
             width: 450px;
-            height: 420px;
+            height: 510px;
             border: 1px solid #dddddd;
             margin-top: 100px;
             margin-right: auto;
@@ -32,15 +32,24 @@
     <form method="post" action="/login/">
         {% csrf_token %}
         <div class="mb-4">
+            <label for="role" class="form-label">角色</label>
+            <select class="form-select" name="role">
+                <option value="2">客户</option>
+                <option value="1">管理员</option>
+            </select>
+        </div>
+
+        <div class="mb-4">
             <label for="username" class="form-label">用户名</label>
-            <input type="text" class="form-control" id="username" placeholder="username">
+            <input type="text" class="form-control" id="username" placeholder="username" name="username">
         </div>
         <div class="mb-4">
             <label for="password" class="form-label">密码</label>
-            <input type="password" class="form-control" id="password" placeholder="password">
+            <input type="password" class="form-control" id="password" placeholder="password" name="password">
         </div>
         <div style="margin-top: 30px;">
             <button type="submit" class="btn btn-primary">登录</button>
+            <span style="color: red;">{{ error }}</span>
             <a style="float: right;" href="{% url 'sms_login' %}">短信登录</a>
         </div>
     </form>
