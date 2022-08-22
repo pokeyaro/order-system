@@ -31,22 +31,18 @@
     <h1>用户登录</h1>
     <form method="post" action="/login/" novalidate>
         {% csrf_token %}
-        <div class="mb-4">
-            <label for="role" class="form-label">角色</label>
-            {{ form.role }}
-        </div>
 
-        <div class="mb-4">
-            <label for="username" class="form-label">用户名</label>
-            {{ form.username }}
-        </div>
-        <div class="mb-4">
-            <label for="password" class="form-label">密码</label>
-            {{ form.password }}
-        </div>
+        {% for field in form %}
+            <div class="mb-4" style="position: relative; margin-bottom: 25px">
+                <label for="{{ field.name }}" class="form-label">{{ field.label }}</label>
+                {{ field }}
+                <span style="color: red; position: absolute;">{{ field.errors.0 }}</span>
+            </div>
+        {% endfor %}
+
         <div style="margin-top: 30px;">
             <button type="submit" class="btn btn-primary">登录</button>
-            <span style="color: red;">{{ error }}</span>
+            <span style="color: red;">{{ form.non_field_errors.0 }}</span>
             <a style="float: right;" href="{% url 'sms_login' %}">短信登录</a>
         </div>
     </form>
