@@ -27,6 +27,11 @@
             /* 边框阴影 */
             box-shadow: 5px 10px 10px rgb(0 0 0 / 5%);
         }
+
+        .errMsg {
+            color: red;
+            position: absolute;
+        }
     </style>
 </head>
 <body>
@@ -42,9 +47,10 @@
                 {% endfor %}
             </select>
         </div>
-        <div class="mb-4">
+        <div class="mb-4" style="position: relative;">
             <label for="mobile" class="form-label">{{ form.mobile.label }}</label>
             <input type="text" class="form-control" id="mobile" placeholder="mobile phone" name="mobile">
+            <span class="errMsg"></span>
         </div>
         {# 使用格栅系统，每行共12份，需要将多个标签包裹在一个div class='row'中 #}
         <div class="row">
@@ -69,6 +75,7 @@
 
 <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
 <script src="{% static 'js/csrf.js' %}"></script>
+<script src="{% static 'plugins/layer/layer.js' %}"></script>
 <script type="text/javascript">
     $(function (){
         // 当页面框架加载完成后，执行该响应事件
@@ -80,18 +87,35 @@
         $("#sendBtn").click(function (){
             // 1.获取手机号，向后台发送请求
             let mobileData = $("#mobile").val();
-            console.log(mobileData);
+            // 1.1 若存在，则清除错误信息
+            $(".errMsg").empty();
+            // 1.2 发送ajax请求
             $.ajax({
                 url: "/sms/send/",
                 type: "POST",
                 data: {mobile: mobileData},
                 success: function (res) {
-                    console.log(res);
+                    if (res.status) {
+                        // 借助layer弹出层，将验证码提示出来
+                        layer.msg("手机验证码是：" + res.data.code);
+                        console.log(res.data);
+                        // 2.动态效果
+                        let $sms = $("#sendBtn");
+                        sendSmsRemind($sms);
+                    } else {
+                        // 处理错误返回值
+                        // {"status": false, "detail": {"mobile": ["手机号格式错误"]}}
+                        // each 循环遍历
+                        $.each(res.detail, function (k, v) {
+                            let msg = v[0].toString();
+                            if (msg.endsWith("。")) {
+                                msg = msg.substr(0, msg.length -1);
+                            }
+                            $("#" + k).next().text(msg);
+                        })
+                    }
                 }
             });
-            // 2.动态效果
-            let $sms = $(this);
-            sendSmsRemind($sms);
         });
     }
 

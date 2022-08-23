@@ -1,11 +1,14 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from web import models
 from utils.encrypt import md5
-
+from utils.message import send_sms
+from django_redis import get_redis_connection
 # 引入Form组件 / 表单验证
 from django import forms
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
+import random
 
 
 class LoginForm(forms.Form):
@@ -114,8 +117,6 @@ class SmsLoginForm(forms.Form):
     )
 
 
-
-
 def sms_login(request):
     if request.method == "GET":
         form = SmsLoginForm()
@@ -126,7 +127,33 @@ def sms_login(request):
         return render(request, "sms_login.html", {"form": form})
 
 
+class MobileForm(forms.Form):
+    mobile = forms.CharField(label="手机号", required=True, validators=[RegexValidator(r'1[3-8]\d{9}', "手机号格式错误"), ])
+
+
 def sms_send(request):
-    print(request.POST)
-    print(request.GET)
-    return HttpResponse("hello")
+    """ 发送短信 """
+    # 1.校验手机号格式
+    request.POST.get("mobile")
+    form = MobileForm(data=request.POST)
+    if not form.is_valid():
+        # print(form.errors.as_json())
+        return JsonResponse({"status": False, "detail": form.errors}, json_dumps_params={"ensure_ascii": False})
+
+    # 2.发送短信 + 生成验证码
+    mobile = form.cleaned_data['mobile']
+    sms_code = str(random.randint(1000, 9999))
+    is_success = send_sms(mobile, sms_code)
+    if not is_success:
+        return JsonResponse({"status": False, "detail": {"mobile": ["发送失败，请稍后重试"]}},
+                            json_dumps_params={"ensure_ascii": False})
+
+    # 3.将手机号和验证码保存（以便于下次校验） redis -> timeout
+    try:
+        conn = get_redis_connection("default")
+        conn.set(mobile, sms_code, ex=60)
+    except Exception as e:
+        print("错误信息：" + str(e))
+        return JsonResponse({"status": False, "detail": {"mobile": ["手机号缓存信息保存失败"]}},
+                            json_dumps_params={"ensure_ascii": False})
+    return JsonResponse({"status": True, "data": {"mobile": mobile, "code": sms_code}})
