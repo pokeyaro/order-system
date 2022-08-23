@@ -41,7 +41,7 @@
         {% csrf_token %}
         <div class="mb-4">
             <label for="role" class="form-label">{{ form.role.label }}</label>
-            <select class="form-select" name="role">
+            <select class="form-select" id="role" name="role">
                 {% for item in form.role %}
                     {{ item }}
                 {% endfor %}
@@ -59,6 +59,7 @@
             {# col-md-x 指标签占格栅x份; offset-md-x 指标签偏移x份 #}
             <div class="mb-4 col-md-7">
                 <input type="text" class="form-control" id="code" placeholder="verification code" name="code">
+                <span class="errMsg"></span>
             </div>
             {# position: 外层相对浮动，内层相对固定 #}
             <div class="col-md-4 offset-md-1" style="position: relative;">
@@ -66,7 +67,7 @@
             </div>
         </div>
         <div style="margin-top: 6px;">
-            <button type="submit" class="btn btn-primary">登录</button>
+            <button id="loginBtn" type="button" class="btn btn-primary">登录</button>
             {# 靠右对齐 #}
             <a style="float: right;" href="{% url 'login' %}">用户名登录</a>
         </div>
@@ -80,26 +81,56 @@
     $(function (){
         // 当页面框架加载完成后，执行该响应事件
         bindSendSmsEvent();
+
+        bindLoginEvent();
     })
+
+    function bindLoginEvent() {
+        $("#loginBtn").click(function () {
+            $(".errMsg").empty();
+            $.ajax({
+                url: "/sms/login/",
+                type: "POST",
+                data: $("form").serialize(),
+                dataType: "JSON",
+                success: function (res) {
+                    console.log(res);
+                    if (res.status) {
+                        console.log(res);
+                        // 前端跳转URL
+                        location.href = res.data;
+                    } else {
+                        $.each(res.detail, function (k, v) {
+                            $("#" + k).next().text(v[0]);
+                        })
+                    }
+                }
+            })
+        })
+    }
+
 
     function bindSendSmsEvent() {
         // 按钮绑定点击事件
         $("#sendBtn").click(function (){
-            // 1.获取手机号，向后台发送请求
-            let mobileData = $("#mobile").val();
-            // 1.1 若存在，则清除错误信息
+            // 1. 若存在，则清除错误信息
             $(".errMsg").empty();
-            // 1.2 发送ajax请求
+            // 2. 发送ajax请求
             $.ajax({
                 url: "/sms/send/",
                 type: "POST",
-                data: {mobile: mobileData},
+                data: {
+                    mobile:  $("#mobile").val(),
+                    role: $("#role").val()
+                },
                 success: function (res) {
                     if (res.status) {
                         // 借助layer弹出层，将验证码提示出来
-                        layer.msg("手机验证码是：" + res.data.code);
+                        let value = res.data.code;
+                        $("#code").val((Number(value) + 1).toString() + " - 1 = ?");
+                        layer.msg("手机验证码是：" + value);
                         console.log(res.data);
-                        // 2.动态效果
+                        // 动态效果
                         let $sms = $("#sendBtn");
                         sendSmsRemind($sms);
                     } else {
@@ -115,7 +146,7 @@
                         })
                     }
                 }
-            });
+            })
         });
     }
 

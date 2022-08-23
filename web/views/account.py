@@ -3,7 +3,9 @@ from django.http import JsonResponse
 from web import models
 from utils.encrypt import md5
 from utils.message import send_sms
+from utils.response import BaseResponse
 from django_redis import get_redis_connection
+from django.conf import settings
 # 引入Form组件 / 表单验证
 from django import forms
 from django.core.validators import RegexValidator
@@ -97,7 +99,7 @@ def login(request):
     # 用户信息写入session
     request.session['user_info'] = {"role": mapping[role], "name": user_obj.username, "id": user_obj.id}
     # 跳转进入项目后台
-    return redirect("/home/")
+    return redirect(settings.LOGIN_HOME)
 
 
 class SmsLoginForm(forms.Form):
@@ -108,11 +110,12 @@ class SmsLoginForm(forms.Form):
     )
     mobile = forms.CharField(
         required=True,
-        label="手机号"
+        label="手机号",
+        validators=[RegexValidator(r'1[3-8]\d{9}', "手机号格式错误"), ]
     )
     code = forms.CharField(
         required=True,
-        validators=[RegexValidator(r'^\d+$', '验证码必须为数字'), ],
+        validators=[RegexValidator(r'^\d{4}$', '验证码格式错误'), ],
         label="短信验证码"
     )
 
@@ -122,30 +125,61 @@ def sms_login(request):
         form = SmsLoginForm()
         return render(request, "sms_login.html", {"form": form})
 
-    form = LoginForm(data=request.POST)
+    resp = BaseResponse()
+    # 1.手机格式校验
+    form = SmsLoginForm(data=request.POST)
     if not form.is_valid():
-        return render(request, "sms_login.html", {"form": form})
+        resp.detail = form.errors
+        return JsonResponse(resp.dict, json_dumps_params={"ensure_ascii": False})
+
+    # 2.检测手机号是否存在
+    mobile = form.cleaned_data['mobile']
+    role = form.cleaned_data['role']
+    if role == "1":
+        user_obj = models.Administrator.objects.filter(active=1, mobile=mobile).first()
+    else:
+        user_obj = models.Customer.objects.filter(active=1, mobile=mobile).first()
+    if not user_obj:
+        resp.detail = {"code": ["手机号不存在", ]}
+        return JsonResponse(resp.dict, json_dumps_params={"ensure_ascii": False})
+
+    # 3.短信验证码 + redis中获取验证码 => 验证
+    code = form.cleaned_data['code']
+    conn = get_redis_connection("default")
+    cache_code = conn.get(mobile)
+    if not cache_code:
+        resp.detail = {"code": ["短信验证码未发送或失效", ]}
+        return JsonResponse(resp.dict, json_dumps_params={"ensure_ascii": False})
+
+    if code != cache_code.decode("utf-8"):
+        resp.detail = {"code": ["短信验证码错误", ]}
+        return JsonResponse(resp.dict, json_dumps_params={"ensure_ascii": False})
+
+    # 4.用户信息写入session
+    mapping = {"1": "admin", "2": "customer"}
+    request.session['user_info'] = {"role": mapping[role], "name": user_obj.username, "id": user_obj.id}
+
+    resp.status = True
+    resp.data = settings.LOGIN_HOME
+    return JsonResponse(resp.dict)
 
 
 class MobileForm(forms.Form):
-    mobile = forms.CharField(label="手机号", required=True, validators=[RegexValidator(r'1[3-8]\d{9}', "手机号格式错误"), ])
-
-
-class DataResponse(object):
-    """ 统一的返回对象格式 """
-    def __init__(self):
-        self.status = False
-        self.detail = None
-        self.data = None
-
-    @property
-    def dict(self):
-        return self.__dict__
+    role = forms.ChoiceField(
+        required=True,
+        choices=(("2", "客户"), ("1", "管理员")),
+        label="角色"
+    )
+    mobile = forms.CharField(
+        label="手机号",
+        required=True,
+        validators=[RegexValidator(r'1[3-8]\d{9}', "手机号格式错误"), ]
+    )
 
 
 def sms_send(request):
     """ 发送短信 """
-    resp = DataResponse()
+    resp = BaseResponse()
 
     # 1.校验手机号格式
     request.POST.get("mobile")
@@ -155,8 +189,18 @@ def sms_send(request):
         resp.detail = form.errors
         return JsonResponse(resp.dict, json_dumps_params={"ensure_ascii": False})
 
-    # 2.发送短信 + 生成验证码
+    # 1.5 数据库是否有该手机号
     mobile = form.cleaned_data['mobile']
+    role = form.cleaned_data['role']
+    if role == "1":
+        exist = models.Administrator.objects.filter(active=1, mobile=mobile).first()
+    else:
+        exist = models.Customer.objects.filter(active=1, mobile=mobile).first()
+    if not exist:
+        resp.detail = {"code": ["手机号不存在", ]}
+        return JsonResponse(resp.dict, json_dumps_params={"ensure_ascii": False})
+
+    # 2.发送短信 + 生成验证码
     sms_code = str(random.randint(1000, 9999))
     is_success = send_sms(mobile, sms_code)
     if not is_success:

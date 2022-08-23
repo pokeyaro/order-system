@@ -169,3 +169,7 @@ PERMISSION = {
     'admin': {},
     'customer': {},
 }
+
+
+# Url location
+LOGIN_HOME = '/home/'
