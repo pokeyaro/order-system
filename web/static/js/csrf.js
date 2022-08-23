@@ -33,7 +33,7 @@ function csrfSafeMethod(method) {
 $.ajaxSetup({
     beforeSend: function (xhr, settings) {
         if (!csrfSafeMethod(settings.type)) {
-            xhr.setRequestHeader("X-CSRFTOKEN", getCokkie("csrftoken"));
+            xhr.setRequestHeader("X-CSRFTOKEN", getCookie("csrftoken"));
         }
     }
 })

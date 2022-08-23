@@ -32,7 +32,7 @@
 <body>
 <div class="box">
     <h1>短信登录</h1>
-    <form method="post" action="/sms/login/">
+    <form method="post">
         {% csrf_token %}
         <div class="mb-4">
             <label for="role" class="form-label">{{ form.role.label }}</label>
@@ -75,46 +75,45 @@
         bindSendSmsEvent();
     })
 
-    // 按钮绑定点击事件
     function bindSendSmsEvent() {
-        // 1.获取手机号，向后台发送请求
-        $.ajax({
-            url: "/sms/send/",
-            type: "POST",
-            data: {mobile: "12300000000"},
-            headers: {
-                "X-CSRFTOKEN": getCookie("csrftoken")
-            },
-            success: function (res) {
-                console.log(res);
-            }
-        })
-        // 2.动态效果
-        sendSmsRemind();
+        // 按钮绑定点击事件
+        $("#sendBtn").click(function (){
+            // 1.获取手机号，向后台发送请求
+            let mobileData = $("#mobile").val();
+            console.log(mobileData);
+            $.ajax({
+                url: "/sms/send/",
+                type: "POST",
+                data: {mobile: mobileData},
+                success: function (res) {
+                    console.log(res);
+                }
+            });
+            // 2.动态效果
+            let $sms = $(this);
+            sendSmsRemind($sms);
+        });
     }
 
     /**
      * 发送短信按钮，倒计时读秒效果
      */
-    function sendSmsRemind() {
-        $("#sendBtn").click(function (){
-            var $sms = $(this);
-            // 2.1 禁用
-            $sms.prop("disabled", true);
-            // 2.2 更新内容
-            var time = 60;
-            var countdown = setInterval(function () {
-                $sms.val(time + " 秒重新发送");
-                time = time - 1;
-                if (time < 1) {
-                    // 2.3 清除计时器
-                    clearInterval(countdown);
-                    // 2.4 恢复原样式
-                    $sms.val("点击获取验证码");
-                    $sms.prop("disabled", false);
-                }
-            }, 1000);
-        });
+    function sendSmsRemind(obj) {
+        // 2.1 禁用
+        obj.prop("disabled", true);
+        // 2.2 更新内容
+        let time = 60;
+        let countdown = setInterval(function () {
+            obj.val(time + " 秒重新发送");
+            time -= 1;
+            if (time < 0) {
+                // 2.3 清除计时器
+                clearInterval(countdown);
+                // 2.4 恢复原样式
+                obj.val("点击获取验证码");
+                obj.prop("disabled", false);
+            }
+        }, 1000);
     }
 </script>
 </body>
