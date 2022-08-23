@@ -19,4 +19,5 @@ from web.views import account
 urlpatterns = [
     path('login/', account.login, name="login"),
     path('sms/login/', account.sms_login, name="sms_login"),
+    path('sms/send/', account.sms_send, name="sms_send"),
 ]

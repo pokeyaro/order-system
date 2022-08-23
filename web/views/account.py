@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from web import models
 from utils.encrypt import md5
 
@@ -124,3 +124,9 @@ def sms_login(request):
     form = LoginForm(data=request.POST)
     if not form.is_valid():
         return render(request, "sms_login.html", {"form": form})
+
+
+def sms_send(request):
+    print(request.POST)
+    print(request.GET)
+    return HttpResponse("hello")

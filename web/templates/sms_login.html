@@ -68,6 +68,7 @@
 </div>
 
 <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'js/csrf.js' %}"></script>
 <script type="text/javascript">
     $(function (){
         // 当页面框架加载完成后，执行该响应事件
@@ -77,6 +78,17 @@
     // 按钮绑定点击事件
     function bindSendSmsEvent() {
         // 1.获取手机号，向后台发送请求
+        $.ajax({
+            url: "/sms/send/",
+            type: "POST",
+            data: {mobile: "12300000000"},
+            headers: {
+                "X-CSRFTOKEN": getCookie("csrftoken")
+            },
+            success: function (res) {
+                console.log(res);
+            }
+        })
         // 2.动态效果
         sendSmsRemind();
     }
@@ -104,7 +116,6 @@
             }, 1000);
         });
     }
-
 </script>
 </body>
 </html>
