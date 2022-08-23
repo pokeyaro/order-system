@@ -131,22 +131,37 @@ class MobileForm(forms.Form):
     mobile = forms.CharField(label="手机号", required=True, validators=[RegexValidator(r'1[3-8]\d{9}', "手机号格式错误"), ])
 
 
+class DataResponse(object):
+    """ 统一的返回对象格式 """
+    def __init__(self):
+        self.status = False
+        self.detail = None
+        self.data = None
+
+    @property
+    def dict(self):
+        return self.__dict__
+
+
 def sms_send(request):
     """ 发送短信 """
+    resp = DataResponse()
+
     # 1.校验手机号格式
     request.POST.get("mobile")
     form = MobileForm(data=request.POST)
     if not form.is_valid():
         # print(form.errors.as_json())
-        return JsonResponse({"status": False, "detail": form.errors}, json_dumps_params={"ensure_ascii": False})
+        resp.detail = form.errors
+        return JsonResponse(resp.dict, json_dumps_params={"ensure_ascii": False})
 
     # 2.发送短信 + 生成验证码
     mobile = form.cleaned_data['mobile']
     sms_code = str(random.randint(1000, 9999))
     is_success = send_sms(mobile, sms_code)
     if not is_success:
-        return JsonResponse({"status": False, "detail": {"mobile": ["发送失败，请稍后重试"]}},
-                            json_dumps_params={"ensure_ascii": False})
+        resp.detail = {"mobile": ["发送失败，请稍后重试"]}
+        return JsonResponse(resp.dict, json_dumps_params={"ensure_ascii": False})
 
     # 3.将手机号和验证码保存（以便于下次校验） redis -> timeout
     try:
@@ -154,6 +169,9 @@ def sms_send(request):
         conn.set(mobile, sms_code, ex=60)
     except Exception as e:
         print("错误信息：" + str(e))
-        return JsonResponse({"status": False, "detail": {"mobile": ["手机号缓存信息保存失败"]}},
-                            json_dumps_params={"ensure_ascii": False})
-    return JsonResponse({"status": True, "data": {"mobile": mobile, "code": sms_code}})
+        resp.detail = {"mobile": ["手机号缓存信息保存失败"]}
+        return JsonResponse(resp.dict, json_dumps_params={"ensure_ascii": False})
+    # 4.成功的数据返回
+    resp.status = True
+    resp.data = {"mobile": mobile, "code": sms_code}
+    return JsonResponse(resp.dict)
