@@ -16,7 +16,7 @@
             /* 宽度 */
             width: 450px;
             /* 高度 */
-            height: 420px;
+            height: 510px;
             /* 边框 */
             border: 1px solid #dddddd;
             /* 顺时针：上, 右, 下, 左 */
@@ -35,20 +35,28 @@
     <form method="post" action="/sms/login/">
         {% csrf_token %}
         <div class="mb-4">
-            <label for="mobile" class="form-label">手机号</label>
-            <input type="text" class="form-control" id="mobile" placeholder="mobile" name="mobile">
+            <label for="role" class="form-label">{{ form.role.label }}</label>
+            <select class="form-select" name="role">
+                {% for item in form.role %}
+                    {{ item }}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-4">
+            <label for="mobile" class="form-label">{{ form.mobile.label }}</label>
+            <input type="text" class="form-control" id="mobile" placeholder="mobile phone" name="mobile">
         </div>
         {# 使用格栅系统，每行共12份，需要将多个标签包裹在一个div class='row'中 #}
         <div class="row">
-            <label for="code" class="form-label">短信验证码</label>
+            <label for="code" class="form-label">{{ form.code.label }}</label>
             {# mb-x 指标签间上下边距 #}
             {# col-md-x 指标签占格栅x份; offset-md-x 指标签偏移x份 #}
-            <div class="mb-4 col-md-8">
-                <input type="text" class="form-control" id="code" placeholder="code" name="code">
+            <div class="mb-4 col-md-7">
+                <input type="text" class="form-control" id="code" placeholder="verification code" name="code">
             </div>
             {# position: 外层相对浮动，内层相对固定 #}
-            <div class="col-md-4" style="position: relative;">
-                <input type="button" value="发送短信" class="btn btn-dark" style="position: absolute; right: 13px;"/>
+            <div class="col-md-4 offset-md-1" style="position: relative;">
+                <input id="sendBtn" type="button" value="点击获取验证码" class="btn btn-dark" style="position: absolute; right: 13px;"/>
             </div>
         </div>
         <div style="margin-top: 6px;">
@@ -58,5 +66,45 @@
         </div>
     </form>
 </div>
+
+<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+<script type="text/javascript">
+    $(function (){
+        // 当页面框架加载完成后，执行该响应事件
+        bindSendSmsEvent();
+    })
+
+    // 按钮绑定点击事件
+    function bindSendSmsEvent() {
+        // 1.获取手机号，向后台发送请求
+        // 2.动态效果
+        sendSmsRemind();
+    }
+
+    /**
+     * 发送短信按钮，倒计时读秒效果
+     */
+    function sendSmsRemind() {
+        $("#sendBtn").click(function (){
+            var $sms = $(this);
+            // 2.1 禁用
+            $sms.prop("disabled", true);
+            // 2.2 更新内容
+            var time = 60;
+            var countdown = setInterval(function () {
+                $sms.val(time + " 秒重新发送");
+                time = time - 1;
+                if (time < 1) {
+                    // 2.3 清除计时器
+                    clearInterval(countdown);
+                    // 2.4 恢复原样式
+                    $sms.val("点击获取验证码");
+                    $sms.prop("disabled", false);
+                }
+            }, 1000);
+        });
+    }
+
+</script>
 </body>
 </html>

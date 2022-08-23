@@ -97,5 +97,30 @@ def login(request):
     return redirect("/home/")
 
 
+class SmsLoginForm(forms.Form):
+    role = forms.ChoiceField(
+        required=True,
+        choices=(("2", "客户"), ("1", "管理员")),
+        label="角色"
+    )
+    mobile = forms.CharField(
+        required=True,
+        label="手机号"
+    )
+    code = forms.CharField(
+        required=True,
+        validators=[RegexValidator(r'^\d+$', '验证码必须为数字'), ],
+        label="短信验证码"
+    )
+
+
+
+
 def sms_login(request):
-    return render(request, "sms_login.html")
+    if request.method == "GET":
+        form = SmsLoginForm()
+        return render(request, "sms_login.html", {"form": form})
+
+    form = LoginForm(data=request.POST)
+    if not form.is_valid():
+        return render(request, "sms_login.html", {"form": form})
