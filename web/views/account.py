@@ -171,6 +171,7 @@ def sms_send(request):
         print("错误信息：" + str(e))
         resp.detail = {"mobile": ["手机号缓存信息保存失败"]}
         return JsonResponse(resp.dict, json_dumps_params={"ensure_ascii": False})
+
     # 4.成功的数据返回
     resp.status = True
     resp.data = {"mobile": mobile, "code": sms_code}
