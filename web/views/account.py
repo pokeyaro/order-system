@@ -36,9 +36,9 @@ def login(request):
 
     # 2-2.校验成功, 用户信息写入session, 跳转进入项目后台
     mapping = {"1": "admin", "2": "customer"}
-    request.session['user_info'] = {"role": mapping[role], "name": user_obj.username, "id": user_obj.id}
+    request.session[settings.MY_SESSION_KEY] = {"role": mapping[role], "name": user_obj.username, "id": user_obj.id}
 
-    return redirect(settings.LOGIN_HOME)
+    return redirect(settings.MY_LOGIN_HOME)
 
 
 def sms_login(request):
@@ -59,10 +59,10 @@ def sms_login(request):
     username = data_dict['username']
     userid = data_dict['userid']
     mapping = {"1": "admin", "2": "customer"}
-    request.session['user_info'] = {"role": mapping[role], "name": username, "id": userid}
+    request.session[settings.MY_SESSION_KEY] = {"role": mapping[role], "name": username, "id": userid}
 
     resp.status = True
-    resp.data = settings.LOGIN_HOME
+    resp.data = settings.MY_LOGIN_HOME
     return JsonResponse(resp.dict)
 
 

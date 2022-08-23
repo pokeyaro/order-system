@@ -10,8 +10,7 @@
 
 def send_sms(mobile, message) -> bool:
     """ 模拟发送消息请求 """
-    print(f"手机号：{mobile}")
-    print(f"验证码：{message}")
+    # print(f"手机号：{mobile}\n验证码：{message}")
     if mobile and message:
         return True
     return False

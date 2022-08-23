@@ -48,6 +48,7 @@ MIDDLEWARE = [
     # 'django.contrib.auth.middleware.AuthenticationMiddleware',
     # 'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'web.middleware.account.AuthMiddleware'
 ]
 
 ROOT_URLCONF = 'order.urls'
@@ -153,12 +154,13 @@ SESSION_COOKIE_PATH = '/'                         # Session的cookie保存的路
 SESSION_COOKIE_DOMAIN = None                      # Session的cookie保存的域名
 SESSION_COOKIE_SECURE = False                     # 是否Https传输cookie
 SESSION_COOKIE_HTTPONLY = True                    # 是否Session的cookie只支持http传输
-SESSION_COOKIE_AGE = 1209600                      # Session的cookie失效日期（2周）
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 7             # Session的cookie失效日期（1周）
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False           # 是否关闭浏览器使得Session过期
 SESSION_SAVE_EVERY_REQUEST = True                 # 是否每次请求都保存Session，默认修改之后才保存
 
 
+# #################### Personal custom configuration ####################
 # Increase menu permissions
 MENU = {
     'admin': [],
@@ -170,6 +172,15 @@ PERMISSION = {
     'customer': {},
 }
 
+# Session key
+MY_SESSION_KEY = 'user_info'
 
 # Url location
-LOGIN_HOME = '/home/'
+MY_LOGIN_HOME = '/home/'
+MY_LOGIN_URL = '/login/'
+MY_WHITE_URL = [
+    '/login/',
+    '/sms/login/',
+    '/sms/send/',
+]
+
