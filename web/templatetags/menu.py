@@ -1,3 +1,5 @@
+import copy
+
 from django.template import Library
 from django.conf import settings
 
@@ -10,6 +12,13 @@ def my_menu(requests):
     login_role = requests.login_user.role
 
     # 2.菜单信息
-    user_menu_list = settings.MY_MENU.get(login_role)
+    user_menu_list = copy.deepcopy(settings.MY_MENU.get(login_role))
+    # 默认选中处理（可控制其他菜单栏默认收缩隐藏）
+    for item in user_menu_list:
+        # item['class'] = 'visually-hidden'
+        for child in item['children']:
+            if child['url'] == requests.path_info:
+                child['class'] = 'active'
+                # item['class'] = ''
 
     return {'menu_list': user_menu_list}

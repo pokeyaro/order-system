@@ -177,19 +177,18 @@ MY_WHITE_URL = [
 MY_MENU = {
     'admin': [
         {
-            'text': '角色信息',
+            'text': '用户管理',
             'icon': 'fa-bed',
             'children': [
-                {'text': '订单管理', 'url': '/xxx/xxx', 'name': 'n1'},
-                {'text': '财务管理', 'url': '/xxx/xxx', 'name': 'n2'},
+                {'text': '用户管理', 'url': '/user/', 'name': 'n1'},
+                {'text': '订单管理', 'url': '/order/', 'name': 'n2'},
             ]
         },
         {
-            'text': '组信息',
-            'icon': 'fa-bed',
+            'text': '其他',
+            'icon': 'fa-keyboard-o',
             'children': [
-                {'text': '订单管理', 'url': '/xxx/xxx', 'name': 'n3'},
-                {'text': '财务管理', 'url': '/xxx/xxx', 'name': 'n4'},
+                {'text': '级别管理', 'url': '/level/', 'name': 'n3'},
             ]
         },
     ],
@@ -198,8 +197,8 @@ MY_MENU = {
             'text': '用户信息',
             'icon': 'fa-bed',
             'children': [
-                {'text': '订单管理', 'url': '/xxx/xxx', 'name': 'n5'},
-                {'text': '财务管理', 'url': '/xxx/xxx', 'name': 'n6'},
+                {'text': '订单管理', 'url': '/xxx/xxx/', 'name': 'n5'},
+                {'text': '财务管理', 'url': '/xxx/xxx/', 'name': 'n6'},
             ]
         },
     ],

@@ -90,3 +90,11 @@ def sms_send(request):
 def home(request):
     return render(request, "home.html")
 
+
+def level(request):
+    return render(request, "level.html")
+def order(request):
+    return render(request, "order.html")
+def user(request):
+    return render(request, "user.html")
+

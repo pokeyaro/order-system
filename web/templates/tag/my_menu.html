@@ -4,9 +4,9 @@
             <div class="title">
                 <span class="icon-wrap"><i class="fa {{ item.icon }}"></i></span>&nbsp;{{ item.text }}
             </div>
-            <div class="body">
+            <div class="body {{ item.class }}">
                 {% for child in item.children %}
-                    <a class="" href="{{ child.url }}">{{ child.text }}</a>
+                    <a class="{{ child.class }}" href="{{ child.url }}">{{ child.text }}</a>
                 {% endfor %}
             </div>
         </div>

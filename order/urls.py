@@ -21,4 +21,7 @@ urlpatterns = [
     path('sms/login/', account.sms_login, name="sms_login"),
     path('sms/send/', account.sms_send, name="sms_send"),
     path('home/', account.home, name="home"),
+    path('level/', account.level, name="level"),
+    path('order/', account.order, name="order"),
+    path('user/', account.user, name="user"),
 ]
