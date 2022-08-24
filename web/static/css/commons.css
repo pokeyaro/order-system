@@ -1,6 +1,14 @@
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
 .pg-header {
-    height: 48px;
-    background-color: #198754;
+    /*height: 48px;*/
+    /*background-color: #198754;*/
 }
 
 .pg-body > .left-menu {

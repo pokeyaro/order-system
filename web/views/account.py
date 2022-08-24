@@ -86,6 +86,11 @@ def sms_send(request):
     resp.data = data_dict
     return JsonResponse(resp.dict)
 
+def logout(request):
+    """ 注销 """
+    request.session.clear()
+    return redirect(settings.MY_LOGIN_URL)
+
 
 def home(request):
     return render(request, "home.html")
