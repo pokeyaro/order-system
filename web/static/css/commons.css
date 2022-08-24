@@ -1,0 +1,28 @@
+.pg-header {
+    height: 48px;
+    background-color: #198754;
+}
+
+.pg-body > .left-menu {
+    background-color: #D3D4D3;
+    position: absolute;
+    left: 1px;
+    top: 48px;
+    bottom: 0;
+    width: 220px;
+    border: 1px solid #D3D4D3;
+    overflow: auto;
+}
+
+.pg-body > .right-body {
+    position: absolute;
+    left: 225px;
+    right: 0;
+    top: 48px;
+    bottom: 0;
+    overflow: scroll;
+    border: 1px solid #D3D4D3;
+    border-top: 0;
+    font-size: 13px;
+    min-width: 755px;
+}
