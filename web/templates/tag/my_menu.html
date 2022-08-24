@@ -1,10 +1,14 @@
-<div>
+<div class="multi-menu">
     {% for item in menu_list %}
-        <div>{{ item.icon }} {{ item.text }}</div>
-        <div>
-            {% for child in item.children %}
-                <a style="display: block" href="{{ child.url }}">{{ child.text }}</a>
-            {% endfor %}
+        <div class="item">
+            <div class="title">
+                <span class="icon-wrap"><i class="fa {{ item.icon }}"></i></span>&nbsp;{{ item.text }}
+            </div>
+            <div class="body">
+                {% for child in item.children %}
+                    <a class="" href="{{ child.url }}">{{ child.text }}</a>
+                {% endfor %}
+            </div>
         </div>
     {% endfor %}
 </div>
