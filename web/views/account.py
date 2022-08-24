@@ -86,3 +86,7 @@ def sms_send(request):
     resp.data = data_dict
     return JsonResponse(resp.dict)
 
+
+def home(request):
+    return render(request, "home.html")
+
