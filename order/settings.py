@@ -161,17 +161,6 @@ SESSION_SAVE_EVERY_REQUEST = True                 # 是否每次请求都保存S
 
 
 # #################### Personal custom configuration ####################
-# Increase menu permissions
-MENU = {
-    'admin': [],
-    'customer': [],
-}
-
-PERMISSION = {
-    'admin': {},
-    'customer': {},
-}
-
 # Session key
 MY_SESSION_KEY = 'user_info'
 
@@ -183,4 +172,42 @@ MY_WHITE_URL = [
     '/sms/login/',
     '/sms/send/',
 ]
+
+# menu
+MY_MENU = {
+    'admin': [
+        {
+            'text': '角色信息',
+            'icon': 'fa-bed',
+            'children': [
+                {'text': '订单管理', 'url': '/xxx/xxx', 'name': 'n1'},
+                {'text': '财务管理', 'url': '/xxx/xxx', 'name': 'n2'},
+            ]
+        },
+        {
+            'text': '组信息',
+            'icon': 'fa-bed',
+            'children': [
+                {'text': '订单管理', 'url': '/xxx/xxx', 'name': 'n3'},
+                {'text': '财务管理', 'url': '/xxx/xxx', 'name': 'n4'},
+            ]
+        },
+    ],
+    'customer': [
+        {
+            'text': '用户信息',
+            'icon': 'fa-bed',
+            'children': [
+                {'text': '订单管理', 'url': '/xxx/xxx', 'name': 'n5'},
+                {'text': '财务管理', 'url': '/xxx/xxx', 'name': 'n6'},
+            ]
+        },
+    ],
+}
+
+# permissions
+MY_PERMISSION = {
+    'admin': {},
+    'customer': {},
+}
 
