@@ -1,5 +1,6 @@
 {% load static %}
 {% load menu %}
+{% load nav %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,13 +25,14 @@
             <div class="user-info right">
                 <a href="#" class="avatar" style="text-decoration: none;">
                     <span style="color: white;margin-right: 5px;">{{ request.login_user.name }}</span>
-                    <img class="img-circle" style="width: 35px;height: 35px; border-radius: 30%;" src="{% static 'images/default.png' %}">
+                    <img class="img-circle" style="width: 35px;height: 35px; border-radius: 30%;"
+                         src="{% static 'images/default.png' %}">
                 </a>
                 <div class="more-info">
-                    <a href="{% url 'logout' %}" class="more-item">注销</a>
                     <a href="#" class="more-item">设置</a>
                     <a href="#" class="more-item">个性化</a>
                     <a href="#" class="more-item">帮助</a>
+                    <a href="{% url 'logout' %}" class="more-item">注销</a>
                 </div>
             </div>
         </div>
@@ -43,7 +45,10 @@
         </div>
     </div>
     <div class="right-body">
-        {% block content %}{% endblock %}
+        {% my_nav request %}
+        <div style="padding: 20px;">
+            {% block content %}{% endblock %}
+        </div>
     </div>
 </div>
 <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>

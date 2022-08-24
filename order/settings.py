@@ -180,15 +180,15 @@ MY_MENU = {
             'text': '用户管理',
             'icon': 'fa-bed',
             'children': [
-                {'text': '用户管理', 'url': '/user/', 'name': 'n1'},
-                {'text': '订单管理', 'url': '/order/', 'name': 'n2'},
+                {'text': '用户管理', 'url': '/user/', 'name': 'user'},
+                {'text': '订单管理', 'url': '/order/', 'name': 'order'},
             ]
         },
         {
             'text': '其他',
             'icon': 'fa-keyboard-o',
             'children': [
-                {'text': '级别管理', 'url': '/level/', 'name': 'n3'},
+                {'text': '级别管理', 'url': '/level/', 'name': 'level'},
             ]
         },
     ],
@@ -204,9 +204,21 @@ MY_MENU = {
     ],
 }
 
-# permissions
-MY_PERMISSION = {
-    'admin': {},
-    'customer': {},
+# public
+MY_PERMISSION_PUBLIC = {
+    'home': {'text': '主页', 'parent': None},
+    'logout': {'text': '注销', 'parent': None},
 }
 
+# permissions
+MY_PERMISSION = {
+    'admin': {
+        'level': {'text': '级别列表', 'parent': None},
+        'order': {'text': '订单列表', 'parent': None},
+        'order_add': {'text': '创建订单', 'parent': 'order'},
+        'user': {'text': '用户列表', 'parent': None},
+    },
+    'customer': {
+        'user': {'text': '用户列表', 'parent': None},
+    },
+}

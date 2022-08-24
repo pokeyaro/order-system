@@ -25,5 +25,6 @@ urlpatterns = [
     path('home/', account.home, name="home"),
     path('level/', account.level, name="level"),
     path('order/', account.order, name="order"),
+    path('order/add/', account.order_add, name="order_add"),
     path('user/', account.user, name="user"),
 ]
