@@ -181,6 +181,7 @@ MY_MENU = {
             'icon': 'fa-bed',
             'children': [
                 {'text': '级别管理', 'url': '/level/list/', 'name': 'level_list'},
+                {'text': '客户管理', 'url': '/customer/list/', 'name': 'customer_list'},
             ]
         },
     ],
@@ -207,6 +208,8 @@ MY_PERMISSION = {
         'level_add': {'text': '新建级别', 'parent': 'level_list'},
         'level_edit': {'text': '编辑级别', 'parent': 'level_list'},
         'level_delete': {'text': '删除级别', 'parent': 'level_list'},
+        'customer_list': {'text': '客户列表', 'parent': None},
+        'customer_add': {'text': '新建客户', 'parent': 'customer_list'},
     },
     'customer': {
     },

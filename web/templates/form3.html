@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <form method="post" novalidate>
+        {% for field in form %}
+            {% csrf_token %}
+            <div class="row g-3 align-items-center" style="position: relative; margin-bottom: 25px;">
+                <div class="col-auto">
+                    <label for="{{ field.id_for_label }}" class="col-form-label">{{ field.label }}</label>
+                </div>
+                <div class="col-auto" style="position: absolute; left: 80px;">
+                    {{ field }}
+                </div>
+                <div class="col-auto">
+                    {% if field.help_text %}
+                        <span class="form-text" style="position: absolute; left: 330px; top: 20px">Hint:&nbsp;{{ field.help_text }}</span>
+                    {% endif %}
+                </div>
+                <span style="color: red; position: absolute;">{{ filed.errors.0 }}</span>
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary btn-sm">保 存</button>
+    </form>
+{% endblock %}

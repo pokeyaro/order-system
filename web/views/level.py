@@ -51,6 +51,8 @@ def level_edit(request, pk):
 
 def level_delete(request, pk):
     # 逻辑删除
-    models.Level.objects.filter(id=pk).update(active=0)
+    exists = models.Customer.objects.filter(level_id=pk).exists()
+    if not exists:
+        models.Level.objects.filter(id=pk).update(active=0)
     return redirect(reverse('level_list'))
 
