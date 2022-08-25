@@ -35,6 +35,7 @@ def level_add(request):
 
 
 def level_edit(request, pk):
+    # 编辑功能（显示当前默认值）
     level_obj = models.Level.objects.filter(id=pk, active=1).first()
     if request.method == "GET":
         form = LevelModelForm(instance=level_obj)
