@@ -25,4 +25,6 @@ urlpatterns = [
 
     path('level/list/', level.level_list, name="level_list"),
     path('level/add/', level.level_add, name="level_add"),
+    path('level/edit/<int:pk>/', level.level_edit, name="level_edit"),
+    path('level/delete/<int:pk>/', level.level_delete, name="level_delete"),
 ]

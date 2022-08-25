@@ -205,6 +205,8 @@ MY_PERMISSION = {
     'admin': {
         'level_list': {'text': '级别列表', 'parent': None},
         'level_add': {'text': '新建级别', 'parent': 'level_list'},
+        'level_edit': {'text': '编辑级别', 'parent': 'level_list'},
+        'level_delete': {'text': '删除级别', 'parent': 'level_list'},
     },
     'customer': {
     },

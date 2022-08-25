@@ -65,7 +65,12 @@ class AuthMiddleware(MiddlewareMixin):
         text_list.append(current_text)
 
         url_list = list()
-        current_url = reverse(current_name)
+        try:
+            # 固定url
+            current_url = reverse(current_name)
+        except:
+            # 动态url
+            current_url = request.path_info
         url_list.append(current_url)
 
         menu_name = current_name

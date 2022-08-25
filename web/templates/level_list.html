@@ -20,8 +20,8 @@
                 <td>{{ row.title }}</td>
                 <td>{{ row.percent }}%</td>
                 <td>
-                    <a class="btn btn-primary btn-sm">编辑</a>
-                    <a class="btn btn-danger btn-sm">删除</a>
+                    <a href="{% url 'level_edit' pk=row.id %}" class="btn btn-primary btn-sm">编辑</a>
+                    <a href="{% url 'level_delete' pk=row.id %}" class="btn btn-danger btn-sm">删除</a>
                 </td>
             </tr>
         {% endfor %}
