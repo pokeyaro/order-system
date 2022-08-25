@@ -180,15 +180,7 @@ MY_MENU = {
             'text': '用户管理',
             'icon': 'fa-bed',
             'children': [
-                {'text': '用户管理', 'url': '/user/', 'name': 'user'},
-                {'text': '订单管理', 'url': '/order/', 'name': 'order'},
-            ]
-        },
-        {
-            'text': '其他',
-            'icon': 'fa-keyboard-o',
-            'children': [
-                {'text': '级别管理', 'url': '/level/', 'name': 'level'},
+                {'text': '级别管理', 'url': '/level/list/', 'name': 'level_list'},
             ]
         },
     ],
@@ -197,28 +189,23 @@ MY_MENU = {
             'text': '用户信息',
             'icon': 'fa-bed',
             'children': [
-                {'text': '订单管理', 'url': '/xxx/xxx/', 'name': 'n5'},
-                {'text': '财务管理', 'url': '/xxx/xxx/', 'name': 'n6'},
             ]
         },
     ],
 }
 
-# public
+# Public
 MY_PERMISSION_PUBLIC = {
     'home': {'text': '主页', 'parent': None},
     'logout': {'text': '注销', 'parent': None},
 }
 
-# permissions
+# Permissions
 MY_PERMISSION = {
     'admin': {
-        'level': {'text': '级别列表', 'parent': None},
-        'order': {'text': '订单列表', 'parent': None},
-        'order_add': {'text': '创建订单', 'parent': 'order'},
-        'user': {'text': '用户列表', 'parent': None},
+        'level_list': {'text': '级别列表', 'parent': None},
+        'level_add': {'text': '新建级别', 'parent': 'level_list'},
     },
     'customer': {
-        'user': {'text': '用户列表', 'parent': None},
     },
 }

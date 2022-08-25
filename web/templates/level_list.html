@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div style="margin-bottom: 5px">
+        <a href="{% url 'level_add' %}" class="btn btn-success btn-sm"><span class="fa fa-plus-square-o"></span>&nbsp;新建</a>
+    </div>
+    <table class="table table-bordered table-sm table-hover">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">标题</th>
+                <th scope="col">折扣</th>
+                <th scope="col">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for row in queryset %}
+            <tr>
+                <th scope="row">{{ row.id }}</th>
+                <td>{{ row.title }}</td>
+                <td>{{ row.percent }}%</td>
+                <td>
+                    <a class="btn btn-primary btn-sm">编辑</a>
+                    <a class="btn btn-danger btn-sm">删除</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

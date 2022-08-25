@@ -13,7 +13,7 @@
     overflow: hidden;
     height: 48px;
     text-align: center;
-    /*background-color: #1c5a9c;*/
+    background-color: #1c5a9c;
 }
 
 .nav .logo-area > a {
@@ -140,4 +140,9 @@
 
 .nav .right-menu .user-info .more-info .more-item:hover {
     background-color: #f1f0f0;
+}
+
+.breadcrumb {
+    background-color: #D3D4D3;
+    font-size: 15px;
 }
