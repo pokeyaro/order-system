@@ -1,16 +1,16 @@
-from django.shortcuts import render, redirect, HttpResponse
-from django.urls import reverse
-from web import models
 from django import forms
+from django.urls import reverse
+from django.shortcuts import render, redirect
+
+from web import models
+from utils.bootstrap import BootstrapForm
 
 
-class LevelModelForm(forms.ModelForm):
+class LevelModelForm(BootstrapForm, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control'
-            field.widget.attrs['placeholder'] = f'请输入{field.label}'
-            field.widget.attrs['style'] = 'width: 800px'
+            field.widget.attrs['style'] = 'width: 500px'
 
     class Meta:
         model = models.Level
