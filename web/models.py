@@ -19,7 +19,7 @@ class Administrator(ActiveBaseModel):
 class Level(ActiveBaseModel):
     """ 级别表 """
     title = models.CharField(verbose_name="标题", max_length=32)
-    percent = models.IntegerField(verbose_name="折扣")
+    percent = models.IntegerField(verbose_name="折扣", help_text="请填入0-100整数，表示百分比，如：50，表示50%")
 
 
 class Customer(ActiveBaseModel):
