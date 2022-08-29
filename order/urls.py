@@ -30,4 +30,7 @@ urlpatterns = [
 
     path('customer/list/', customer.customer_list, name="customer_list"),
     path('customer/add/', customer.customer_add, name="customer_add"),
+    path('customer/edit/<int:pk>/', customer.customer_edit, name="customer_edit"),
+    path('customer/reset/<int:pk>/', customer.customer_reset, name="customer_reset"),
+    path('customer/delete/', customer.customer_delete, name="customer_delete"),
 ]

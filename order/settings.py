@@ -210,6 +210,9 @@ MY_PERMISSION = {
         'level_delete': {'text': '删除级别', 'parent': 'level_list'},
         'customer_list': {'text': '客户列表', 'parent': None},
         'customer_add': {'text': '新建客户', 'parent': 'customer_list'},
+        'customer_edit': {'text': '编辑客户', 'parent': 'customer_list'},
+        'customer_reset': {'text': '修改密码', 'parent': 'customer_list'},
+        'customer_delete': {'text': '删除客户', 'parent': 'customer_list'},
     },
     'customer': {
     },
